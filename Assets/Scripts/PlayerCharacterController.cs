@@ -13,12 +13,15 @@ public class PlayerCharacterController : MonoBehaviour
     public float GravityDownForce = 20f;
     public LayerMask GroundCheckLayers = -1;
     public float GroundCheckDistance = 0.05f;
+    [Header("Camera")]
+    public float CameraHeightRatio = 0.9f;
     [Header("Movement")]
     public float MaxSpeedOnGround = 10f;
     public float MaxSpeedInAir = 10f;
     public float MovementSharpnessOnGround = 15f;
     public float AccelerationSpeedInAir = 25f;
     public float RotationSpeed = 200f;
+    public float RotationMultiplier = 0.4f;
     [Header("Jump")]
     public float JumpForce = 9f;
     
@@ -33,6 +36,7 @@ public class PlayerCharacterController : MonoBehaviour
     PlayerInputHandler inputHandler;
     CharacterController controller;
     CameraController cameraController;
+    Camera playerCamera;
     Vector3 groundNormal;
     Vector3 latestImpactSpeed;
     float lastTimeJumped = 0f;
@@ -40,11 +44,14 @@ public class PlayerCharacterController : MonoBehaviour
     const float jumpGroundingPreventionTime = 0.2f;
     const float groundCheckDistanceInAir = 0.07f;
 
-    private void Awake()
+    private void Start()
     {
         inputHandler = GetComponent<PlayerInputHandler>();
         controller = GetComponent<CharacterController>();
         cameraController = GetComponentInChildren<CameraController>();
+        cameraController.GetCameraHeightRatio(CameraHeightRatio);
+        playerCamera = GetComponentInChildren<Camera>();
+
     }
 
 
@@ -107,7 +114,8 @@ public class PlayerCharacterController : MonoBehaviour
         // PlayerCamera.transform.localRotation = Quaternion.Euler(inputHandler.GetLookInputsHorizontal()+inputHandler.GetLookInputsHorizontal(),
         //     transform.localEulerAngles.y,transform.localEulerAngles.z);
         //PlayerCamera.transform.localEulerAngles = cameraController.CameraRotation( * RotationSpeed);
-        cameraController.CameraRotation(inputHandler.GetLookInputsHorizontal(),inputHandler.GetLookInputsVertical());
+        //cameraController.CameraRotation(inputHandler.GetLookInputsHorizontal(),inputHandler.GetLookInputsVertical());
+        playerCamera.transform.localEulerAngles = cameraController.CameraRotation(inputHandler.GetLookInputsVertical()*RotationSpeed*RotationMultiplier);
 
         //character movement handling
         float speedModifier = 1f;

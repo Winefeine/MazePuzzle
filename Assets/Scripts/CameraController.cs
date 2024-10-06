@@ -6,17 +6,18 @@ using Unity.VisualScripting;
 
 public class CameraController : MonoBehaviour
 {
-    public CinemachineFreeLook MainCam; 
-    public float mouseSensitivity = 2f;
+    public CinemachineVirtualCamera ResetCamera;
+    public CinemachineVirtualCamera ChangeCamera;
+    public CinemachineVirtualCamera ActiveCamera;
 
-    public CinemachineFreeLook CurrentCam;
 
     PlayerInputHandler playerInputHandler;
+    float cameraVerticalAngle = 0f;
 
     void Start()
     {
         playerInputHandler = GameManager.Instance.PlayerInputHandler;
-        CurrentCam = MainCam;
+        
         ResetCurrentCam();
     }
 
@@ -29,18 +30,23 @@ public class CameraController : MonoBehaviour
 
     public void ResetCurrentCam()
     {
-        CurrentCam.m_XAxis.Value = 0;
-        CurrentCam.m_YAxis.Value = 0.5f;
+
     }
 
-    public void CameraRotation(float xValue,float yValue)
+    public Vector3 CameraRotation(float rotationValue)
     {
-        CurrentCam.m_XAxis.Value += xValue;
-        CurrentCam.m_YAxis.Value += yValue;
+        cameraVerticalAngle += rotationValue;
+        cameraVerticalAngle = Mathf.Clamp(cameraVerticalAngle, -89f, 89f);
+        
+        //ChangeCamera.transform.localEulerAngles = new Vector3(cameraVerticalAngle,0f,ChangeCamera.transform.rotation.eulerAngles.z);
+        ResetCamera.transform.localEulerAngles = new Vector3(cameraVerticalAngle,0f,0f);
 
-        CurrentCam.m_YAxis.Value = Mathf.Clamp(CurrentCam.m_YAxis.Value, 0.2f, 0.8f);
+        return ResetCamera.transform.localEulerAngles;
+    }
 
-        CurrentCam.transform.rotation = Quaternion.Euler(transform.eulerAngles.x,transform.eulerAngles.y,0f);
+    public void GetCameraHeightRatio(float ratio)
+    {
+        ResetCamera.transform.localPosition = new Vector3(0f,ratio,0f);
     }
 
 
