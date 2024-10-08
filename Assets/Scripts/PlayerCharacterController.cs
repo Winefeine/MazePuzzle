@@ -30,7 +30,6 @@ public class PlayerCharacterController : MonoBehaviour
     public bool HasJumpedThisFrame { get; private set; }
 
     [Header("Test")]
-    public Transform tran;
     public bool ground;
 
     PlayerInputHandler inputHandler;
