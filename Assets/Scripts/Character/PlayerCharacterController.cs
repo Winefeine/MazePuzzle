@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.Rendering;
 
-[RequireComponent(typeof(CharacterController),typeof(PlayerInputHandler))]
+[RequireComponent(typeof(CharacterController))]
 public class PlayerCharacterController : MonoBehaviour
 {
     [Header("References")] 
@@ -45,7 +45,7 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void Start()
     {
-        inputHandler = GetComponent<PlayerInputHandler>();
+        inputHandler = GameRoot.Instance.PlayerInputHandler;
         controller = GetComponent<CharacterController>();
         cameraController = GetComponentInChildren<CameraController>();
         cameraController.GetCameraHeightRatio(CameraHeightRatio);
@@ -69,7 +69,11 @@ public class PlayerCharacterController : MonoBehaviour
         
         }
 
-        HandleCharacterMovement();
+        if(GameRoot.Instance.Is3D)
+        {
+            HandleCharacterMovement();
+        }
+        
         ground = IsGrounded;
     }
 

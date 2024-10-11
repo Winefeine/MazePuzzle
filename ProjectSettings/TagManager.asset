@@ -11,12 +11,12 @@ TagManager:
   - 
   - Water
   - UI
+  - Player
+  - Floor
+  - Glass
+  - Wall
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Trigger
   - 
   - 
   - 
@@ -40,4 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: 2DMap
+    uniqueID: 1311902741
+    locked: 0
+  - name: 2DPlayer
+    uniqueID: 1080388959
     locked: 0

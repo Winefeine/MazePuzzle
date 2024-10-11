@@ -6,8 +6,8 @@ using Unity.VisualScripting;
 
 public class CameraController : MonoBehaviour
 {
-    public CinemachineVirtualCamera ResetCamera;
-    public CinemachineVirtualCamera ChangeCamera;
+    public CinemachineVirtualCamera Camera3D;
+    public CinemachineVirtualCamera Camera2D;
     public CinemachineVirtualCamera ActiveCamera;
 
 
@@ -16,9 +16,8 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        playerInputHandler = GameManager.Instance.PlayerInputHandler;
+        playerInputHandler = GameRoot.Instance.PlayerInputHandler;
         
-        ResetCurrentCam();
     }
 
     void Update()
@@ -28,25 +27,32 @@ public class CameraController : MonoBehaviour
 
     }
 
-    public void ResetCurrentCam()
+    public void CamSwitchTo3D()
     {
-
+        Camera3D.Priority = 10;
+        Camera2D.Priority = 5;
     }
+
+    public void CamSwitchTo2D()
+    {
+        Camera3D.Priority = 5;
+        Camera2D.Priority = 10;
+    }
+
 
     public Vector3 CameraRotation(float rotationValue)
     {
         cameraVerticalAngle += rotationValue;
         cameraVerticalAngle = Mathf.Clamp(cameraVerticalAngle, -89f, 89f);
         
-        //ChangeCamera.transform.localEulerAngles = new Vector3(cameraVerticalAngle,0f,ChangeCamera.transform.rotation.eulerAngles.z);
-        ResetCamera.transform.localEulerAngles = new Vector3(cameraVerticalAngle,0f,0f);
+        Camera3D.transform.localEulerAngles = new Vector3(cameraVerticalAngle,0f,0f);
 
-        return ResetCamera.transform.localEulerAngles;
+        return Camera3D.transform.localEulerAngles;
     }
 
     public void GetCameraHeightRatio(float ratio)
     {
-        ResetCamera.transform.localPosition = new Vector3(0f,ratio,0f);
+        Camera3D.transform.localPosition = new Vector3(0f,ratio,0f);
     }
 
 

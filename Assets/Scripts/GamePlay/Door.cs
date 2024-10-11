@@ -10,6 +10,8 @@ public class DoorController : MonoBehaviour
     public Vector3 OpenAngle = new Vector3(0f,90f,0f); // 门打开时的角度
     public float Duration = 1f; // 旋转所需时间
 
+    public float TriggerDistance;
+
     public bool IsOpen = false;
     //public bool IsOpen { get; private set;}
 
@@ -21,11 +23,16 @@ public class DoorController : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T))
+        if(Input.GetKeyDown(KeyCode.E))
         {
-            ToggleDoor();
+            if(NearDoor())
+            {
+                ToggleDoor();
+            }else
+            {
+                //Debug.Log(name+"is not close enough.");
+            }
         }
-
     }
 
     public void ToggleDoor()
@@ -41,8 +48,25 @@ public class DoorController : MonoBehaviour
             transform.DOLocalRotateQuaternion(Quaternion.Euler(OpenAngle), Duration);
         }
 
-        // 切换门的状态
         IsOpen = !IsOpen;
+    }
+
+    private bool NearDoor()
+    {
+        Vector3 pos = GameRoot.Instance.PlayerCharacterController.transform.position;
+        float distance = Vector3.Distance(pos,this.transform.position);
+        if(distance < TriggerDistance)
+        {
+            if(pos.z > transform.position.z)
+            {
+                //UI
+                Debug.Log("不能从这一侧打开");
+                return false;
+            }
+            return true;
+        }
+
+        return false;
     }
 
 }
